@@ -5,8 +5,8 @@ const int buttonYellowPin = 4;    // yellow button
 
 // LED PINS - OUTPUT
 const int ledGreenPin = 8;       // green led
-const int ledRedPin = 9;         // red led
-const int ledYellowPin = 10;     // yellow led
+const int ledRedPin = 10;         // red led
+const int ledYellowPin = 9;     // yellow led
 
 // Variables will change:
 int buttonPushCounter = 0;   // counter for the number of button presses
@@ -56,9 +56,8 @@ void loop() {
       // if the state has changed, increment the counter
       if (buttonStateGreen == HIGH) {
         // if the current state is HIGH then the button went from off to on:
-        digitalWrite(ledRedPin, LOW);
-        digitalWrite(ledYellowPin, LOW);
-        digitalWrite(ledGreenPin, HIGH); // turn on led
+        greenOn(); // turn on green led (see respective defined function)
+        counter+=1;
       }
       // Delay a little bit to avoid bouncing
       delay(50);
@@ -67,47 +66,64 @@ void loop() {
     lastButtonStateGreen = buttonStateGreen;
   }
 
-  // scope block for red
-  {
-      // compare the buttonStates to the previous states
-    if ((buttonStateRed != lastButtonStateRed)) {
-      // if the state has changed, increment the counter
-      if (buttonStateRed == HIGH) {
-        // if the current state is HIGH then the button went from off to on:
-        digitalWrite(ledGreenPin, LOW);
-        digitalWrite(ledYellowPin, LOW);
-        digitalWrite(ledRedPin, HIGH); // turn on led
-      }
-      delay(50);
-    }
-    // save the current state as the last state, for next time through the loop
-    lastButtonStateRed = buttonStateRed;
-  }
-
-  // scope for yellow
+  // // scope block for red
   {
       // compare the buttonStates to the previous states
     if ((buttonStateYellow != lastButtonStateYellow)) {
       // if the state has changed, increment the counter
       if (buttonStateYellow == HIGH) {
         // if the current state is HIGH then the button went from off to on:
-        digitalWrite(ledGreenPin, LOW);
-        digitalWrite(ledRedPin, LOW);
-        digitalWrite(ledYellowPin, HIGH); // turn on led
+        yellowOn(); // turns yellow led on (see the respective defined function)
+        //counter+=0; don't need this because yellow literally does nothing
       }
       delay(50);
     }
     // save the current state as the last state, for next time through the loop
     lastButtonStateYellow = buttonStateYellow;
+  }
+
+  //scope for red
+  {
+      // compare the buttonStates to the previous states
+    if ((buttonStateRed != lastButtonStateRed)) {
+      // if the state has changed, increment the counter
+      if (buttonStateRed == HIGH) {
+        // if the current state is HIGH then the button went from off to on:
+        redOn(); // turns red led on (see respective defined function)
+        counter-=1;
+      }
+      delay(50);
+    }
+    // save the current state as the last state, for next time through the loop
+    lastButtonStateRed = buttonStateRed;
   
   }
 
-// newly added counter code
-  if (buttonStateGreen == HIGH) {
-    counter += 1;
-  } else if (buttonStateYellow == HIGH) {
-    counter += 0;
-  } else if (buttonStateRed == HIGH) {
-    counter -= 1;
+  Serial.println(counter);
+
+  if (counter > 0) {
+    greenOn();
+  } else if (counter < 0) {
+    redOn();
+  } else {
+    yellowOn();
+  }
 }
+
+void redOn() {
+  digitalWrite(ledGreenPin, LOW);
+  digitalWrite(ledYellowPin, LOW);
+  digitalWrite(ledRedPin, HIGH); // turn on led
+}
+
+void greenOn() {
+  digitalWrite(ledRedPin, LOW);
+  digitalWrite(ledYellowPin, LOW);
+  digitalWrite(ledGreenPin, HIGH); // turn on led
+}
+
+void yellowOn() {
+  digitalWrite(ledGreenPin, LOW);
+  digitalWrite(ledRedPin, LOW);
+  digitalWrite(ledYellowPin, HIGH); // turn on led
 }
