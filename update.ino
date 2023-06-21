@@ -10,6 +10,8 @@ const int ledYellowPin = 10;     // yellow led
 
 // Variables will change:
 int buttonPushCounter = 0;   // counter for the number of button presses
+// IMPORTANT: Counter for current mood, increment/decrement - just added, june 21 2023
+int counter = 0;
 
 // GREEN BUTTON STATE CHECK
 int buttonStateGreen = 0;         // current state of the green button
@@ -19,11 +21,9 @@ int lastButtonStateGreen = 0;     // previous state of the green button
 int buttonStateRed = 0;           // current state of the red button
 int lastButtonStateRed = 0;       // previous state of the red button
 
-
 // YELLOW BUTTON STATE CHECK
 int buttonStateYellow = 0;           // current state of the yellow button
 int lastButtonStateYellow = 0;       // previous state of the yellow button
-
 
 void setup() {
   // initialize the button pins as inputs
@@ -101,5 +101,13 @@ void loop() {
     lastButtonStateYellow = buttonStateYellow;
   
   }
-  
+
+// newly added counter code
+  if (buttonStateGreen == HIGH) {
+    counter += 1;
+  } else if (buttonStateYellow == HIGH) {
+    counter += 0;
+  } else if (buttonStateRed == HIGH) {
+    counter -= 1;
+}
 }
