@@ -110,7 +110,7 @@ void loop() {
 void redLEDOn() {
   digitalWrite(ledGreenPin, LOW);
   digitalWrite(ledYellowPin, LOW);
-  digitalWrite(ledRedPin, HIGH); // turn on red led
+  digitalWrite(ledRedPin, HIGH);
 }
 
 // turn on green LED
